@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macchi Trash - Animated Flies for Your macOS Trash</title>
+    <meta name="description" content="A tiny macOS menu-bar app that shows animated flies buzzing around your Trash icon when it has items. Because trash attracts macchi.">
+    <style>
+        :root {
+            --bg: #fafafa;
+            --text: #1a1a1a;
+            --text-secondary: #666;
+            --accent: #6b8f5e;
+            --accent-hover: #5a7d4e;
+            --card-bg: #fff;
+            --border: #e5e5e5;
+            --code-bg: #f5f5f5;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1a1a1a;
+                --text: #fafafa;
+                --text-secondary: #999;
+                --accent: #8bba7a;
+                --accent-hover: #9dcb8e;
+                --card-bg: #2a2a2a;
+                --border: #333;
+                --code-bg: #333;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .name-note {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(107, 143, 94, 0.35);
+        }
+
+        .version {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 50px;
+        }
+
+        .feature {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 1.75rem;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .feature p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .how-it-works {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .step {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+        }
+
+        .step-arrow {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        .install-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .install-section h2 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        .code-block {
+            display: block;
+            background: var(--code-bg);
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .install-section ol {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .install-section li {
+            margin-bottom: 10px;
+        }
+
+        .install-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .install-section a:hover {
+            text-decoration: underline;
+        }
+
+        .note {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 12px;
+        }
+
+        .info-box {
+            background: #e8f4ed;
+            border: 1px solid #b8dfc5;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .info-box {
+                background: #1e2e24;
+                border-color: #2a4a35;
+            }
+        }
+
+        .permissions {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .permissions h2 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        .permissions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .permissions li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+        }
+
+        .permissions li::before {
+            content: "\2192";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .tagline { font-size: 1.1rem; }
+            .step-arrow { display: none; }
+            .steps { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="icon">🪰</div>
+            <h1>Macchi Trash</h1>
+            <p class="tagline">Animated flies for your macOS Trash icon.<br>Because trash attracts flies.</p>
+            <p class="name-note">"Macchi" (मक्खी) is Hindi for "fly" &mdash; the pesky kind that won't leave your trash alone.</p>
+            <div class="cta-group">
+                <a href="https://github.com/harshvardhaniimi/macchi-trash/releases/latest/download/MacchiTrash.zip" class="download-btn">
+                    <span>&#11015;&#65039;</span> Download for Mac
+                </a>
+                <span class="version">macOS 13.0+ &bull; Apple Silicon &amp; Intel</span>
+            </div>
+        </header>
+
+        <div class="how-it-works">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">Trash has items</div>
+                <span class="step-arrow">&rarr;</span>
+                <div class="step">Hover over Trash in Dock</div>
+                <span class="step-arrow">&rarr;</span>
+                <div class="step">Flies appear</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Features</h2>
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🪰</div>
+                <h3>Animated Flies</h3>
+                <p>Tiny flies buzz and orbit around your Trash icon when it has items inside.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Smart Detection</h3>
+                <p>Uses macOS Accessibility APIs to detect exactly when your cursor is over the Trash.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🗑️</div>
+                <h3>Trash-Aware</h3>
+                <p>Flies only appear when there's actually something in the Trash. Empty trash, no flies.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📍</div>
+                <h3>Manual Calibration</h3>
+                <p>If auto-detection doesn't work perfectly, calibrate the Trash position with one click.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🖥️</div>
+                <h3>Menu Bar App</h3>
+                <p>Lives quietly in your menu bar. No Dock icon, no clutter, just flies when you need them.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🪶</div>
+                <h3>Lightweight</h3>
+                <p>Native Swift app under 100KB. Minimal CPU and memory usage.</p>
+            </div>
+        </div>
+
+        <div class="install-section">
+            <h2>Install</h2>
+            <ol>
+                <li><a href="https://github.com/harshvardhaniimi/macchi-trash/releases/latest/download/MacchiTrash.zip">Download MacchiTrash.zip</a> and extract it</li>
+                <li>Move <strong>MacchiTrash.app</strong> to Applications</li>
+                <li>Right-click the app &rarr; <strong>Open</strong> (first time only, to bypass Gatekeeper)</li>
+                <li>Grant <strong>Accessibility</strong> permission when prompted</li>
+            </ol>
+            <div class="info-box">
+                <strong>Why right-click?</strong> macOS blocks apps from unidentified developers by default. Right-clicking and choosing "Open" tells macOS you trust this app.
+            </div>
+        </div>
+
+        <div class="install-section">
+            <h2>Build from Source</h2>
+            <p>Requires Xcode Command Line Tools:</p>
+            <code class="code-block">git clone https://github.com/harshvardhaniimi/macchi-trash.git
+cd macchi-trash
+./build_app.sh
+open MacchiTrash.app</code>
+        </div>
+
+        <div class="permissions">
+            <h2>Permissions</h2>
+            <ul>
+                <li><strong>Accessibility</strong> &mdash; Required for detecting when your cursor is over the Trash icon in the Dock<br>
+                    <span style="color: var(--text-secondary); font-size: 0.85rem;">System Settings &rarr; Privacy &amp; Security &rarr; Accessibility</span></li>
+            </ul>
+            <div class="info-box">
+                <strong>Privacy note:</strong> Macchi Trash only reads Dock element positions. It does not monitor keystrokes, read window contents, or send any data anywhere.
+            </div>
+        </div>
+
+        <div class="permissions" style="text-align: center;">
+            <h2>Feedback Welcome!</h2>
+            <p>This app was <strong>entirely vibe coded</strong> with <a href="https://claude.ai/code">Claude Code</a>.</p>
+            <p style="margin-top: 12px;">Found a bug? Have a feature idea? <a href="https://github.com/harshvardhaniimi/macchi-trash/issues">Open an issue</a> or submit a PR!</p>
+        </div>
+
+        <footer>
+            <p>
+                Created with <a href="https://claude.ai/code">Claude Code</a> by <strong>Dr. Harshvardhan</strong>
+            </p>
+            <p style="margin-top: 8px;">
+                Open source on <a href="https://github.com/harshvardhaniimi/macchi-trash">GitHub</a> &bull; MIT License
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
