@@ -363,17 +363,18 @@
             <ol>
                 <li><a href="https://github.com/harshvardhaniimi/macchi-trash/releases/latest/download/MacchiTrash.zip">Download MacchiTrash.zip</a> and extract it</li>
                 <li>Move <strong>MacchiTrash.app</strong> to Applications</li>
-                <li>Right-click the app &rarr; <strong>Open</strong> (first time only, to bypass Gatekeeper)</li>
+                <li>Open Terminal and run: <code>xattr -cr /Applications/MacchiTrash.app</code></li>
+                <li>Right-click the app &rarr; <strong>Open</strong></li>
                 <li>Grant <strong>Accessibility</strong> permission when prompted</li>
             </ol>
             <div class="info-box">
-                <strong>Why right-click?</strong> macOS blocks apps from unidentified developers by default. Right-clicking and choosing "Open" tells macOS you trust this app.
+                <strong>Why the Terminal step?</strong> macOS quarantines apps from developers who aren't in Apple's Developer Program ($99/year). Apple has rejected my enrollment twice, so here we are. The <code>xattr -cr</code> command removes the quarantine flag&mdash;perfectly safe for open-source apps you can <a href="https://github.com/harshvardhaniimi/macchi-trash">inspect yourself</a>.
             </div>
         </div>
 
         <div class="install-section">
             <h2>Build from Source</h2>
-            <p>Requires Xcode Command Line Tools:</p>
+            <p>If you'd rather not trust a downloaded binary, build it yourself. Requires Xcode Command Line Tools:</p>
             <code class="code-block">git clone https://github.com/harshvardhaniimi/macchi-trash.git
 cd macchi-trash
 ./build_app.sh
