@@ -1,5 +1,8 @@
 # Macchi Trash
 
+<img width="961" height="670" alt="image" src="https://github.com/user-attachments/assets/2adcf16e-c492-4082-9c1c-38b3f9491260" />
+
+
 A tiny macOS menu-bar app that shows animated flies buzzing around your Trash icon when it has items. Because trash attracts *macchi*.
 
 > **macchi** (मक्खी) is Hindi for "fly" — the pesky kind that won't leave your trash alone.
